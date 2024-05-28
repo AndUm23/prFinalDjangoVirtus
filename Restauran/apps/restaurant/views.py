@@ -30,11 +30,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializerModel 
 
     def destroy(self, request, *args, **kwargs):
-        permission_classes = [IsAuthenticated, IsManagerOrAdminTables]
-        # Check if the user is a Manager or AdminTables
-        if request.user.charge not in ['MANAGER', 'ADMINTABLES']:
-            return Response({"error": "You don't have permission to perform this action"}, status=403)
-        return super().destroy(request, *args, **kwargs)
+        try:
+            permission_classes = [IsAuthenticated, IsManagerOrAdminTables]
+            # Check if the user is a Manager or AdminTables
+            if request.user.charge not in ['MANAGER', 'ADMINTABLES']:
+                return Response({"error": "You don't have permission to perform this action"}, status=403)
+            return super().destroy(request, *args, **kwargs)
+        except:
+            return Response({"error": "You don't have permission to perform this action"})
 
 
 class BillViewSet(viewsets.ModelViewSet):
@@ -42,13 +45,15 @@ class BillViewSet(viewsets.ModelViewSet):
     serializer_class = BillSerializerModel
     
     def destroy(self, request, *args, **kwargs):
-        permission_classes = [IsAuthenticated, IsManager]
-        # Check if the user is a Manager
-        if not request.user.charge == 'MANAGER':
-            return Response({"error": "You don't have permission to perform this action"}, status=403)
-        return super().destroy(request, *args, **kwargs)
-    
-
+        try:
+            permission_classes = [IsAuthenticated, IsManager]
+            # Check if the user is a Manager
+            if not request.user.charge == 'MANAGER':
+                return Response({"error": "You don't have permission to perform this action"}, status=403)
+            return super().destroy(request, *args, **kwargs)
+        except:
+            return Response({"error": "You don't have permission to perform this action"})
+            
 
 class AddShiftSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
