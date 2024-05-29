@@ -33,11 +33,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         try:
             permission_classes = [IsAuthenticated, IsManagerOrAdminTables]
             # Check if the user is a Manager or AdminTables
-            if request.user.charge not in ['MANAGER', 'ADMINTABLES']:
+            if request.user.waiter.charge not in ['MG', 'AT']:
                 return Response({"error": "You don't have permission to perform this action"}, status=403)
             return super().destroy(request, *args, **kwargs)
         except:
-            return Response({"error": "You don't have permission to perform this action"})
+            return Response({"error": "The action fail."})
 
 
 class BillViewSet(viewsets.ModelViewSet):
@@ -48,11 +48,13 @@ class BillViewSet(viewsets.ModelViewSet):
         try:
             permission_classes = [IsAuthenticated, IsManager]
             # Check if the user is a Manager
-            if not request.user.charge == 'MANAGER':
+            if not request.user.waiter.charge == 'MG':
+                print(request.user.waiter.charge)
                 return Response({"error": "You don't have permission to perform this action"}, status=403)
             return super().destroy(request, *args, **kwargs)
-        except:
-            return Response({"error": "You don't have permission to perform this action"})
+        except Exception as e:
+            print("Error:" + str(e))
+            return Response({"error": "The action fail."})
             
 
 class AddShiftSet(viewsets.ModelViewSet):

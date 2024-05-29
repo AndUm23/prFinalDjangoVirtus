@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
+   
     #External
     "rest_framework",
     "corsheaders",
     "rest_framework_simplejwt",
+    "drf_yasg",
     #Internal
     "apps.restaurant",
     "apps.products",
